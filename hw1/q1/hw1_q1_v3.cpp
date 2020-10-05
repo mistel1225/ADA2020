@@ -36,7 +36,7 @@ long long shortest_dist_brute(vector<vector<long long>> &coord_vector, long long
 }
 
 long long shortest_dist(vector<vector<long long>> &coord_vector, long long first, long long last){
-	if(last-first<=100){
+	if(last-first<=3){
 		return shortest_dist_brute(coord_vector, first, last);
 	}
 	long long mid = (last+first)/2;
@@ -50,7 +50,7 @@ long long shortest_dist(vector<vector<long long>> &coord_vector, long long first
 	vector<vector<long long>> strip_vector(last-first, vector<long long>(2));
 	long long strip_size = 0;
 	for(long long i=first; i<last; i++){
-		if(abs(coord_vector[i][0]-coord_vector[mid][0]) < d){
+		if(abs((coord_vector[i][0]-coord_vector[mid][0])*(coord_vector[i][0]-coord_vector[mid][0])) < d){
 			strip_vector[strip_size][0] = coord_vector[i][0];
 			strip_vector[strip_size][1] = coord_vector[i][1];
 			strip_size++;
