@@ -49,7 +49,7 @@ long long shortest_dist(vector<vector<long long>> &coord_vector, long long first
 	#endif
 	vector<vector<long long>> strip_vector(last-first, vector<long long>(2));
 	long long strip_size = 0;
-	for(long long i=0; i<(last-first); i++){
+	for(long long i=first; i<last; i++){
 		if(abs(coord_vector[i][0]-coord_vector[mid][0]) < d){
 			strip_vector[strip_size][0] = coord_vector[i][0];
 			strip_vector[strip_size][1] = coord_vector[i][1];
