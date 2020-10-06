@@ -1,5 +1,7 @@
 #include <string>
 #include <vector>
+#include <iostream>
+#include <algorithm>
 #include "helper.h"
 using namespace std;
 using namespace Memory;
@@ -61,7 +63,7 @@ int main(){
 			event_record[i][0] = 0;//player i
 			event_record[i][1] = event_num;
 			event_num++;
-			cin>>event[i][2]>>event_record[i][3];
+			cin>>event_record[i][2]>>event_record[i][3];
 		}
 		else{
 			event_record[i][0] = 1;//bumb i
