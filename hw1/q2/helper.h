@@ -15,8 +15,7 @@
 #define _HELPER_H
 
 #include <cassert>
-#include <iostream>
-using namespace std;
+
 namespace Memory {
     constexpr int N = 200000; // Number of cells, change this if you need more cells
 
