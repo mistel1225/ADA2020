@@ -19,7 +19,7 @@ void find_damage_rec(int start, int end, int N, vector<vector<long long>> &event
 	find_damage_rec(start, mid, N, event_record);
 	find_damage_rec(mid+1, end, N, event_record);
 	vector<vector<long long>> left_player(mid-start+1, vector<long long>(4, 0));
-	vector<vector<long long>> right_bumb(end-mid+1, vector<long long>(4, 0));
+	vector<vector<long long>> right_bumb(end-mid+1, vector<long long>(5, 0));
 	#ifdef DEBUG
 	cout<<"==============================="<<endl;
 	cout<<"end of recursive, start combine:"<<endl;
@@ -66,16 +66,9 @@ void find_damage_rec(int start, int end, int N, vector<vector<long long>> &event
 	int left_player_num_temp = left_player_num-1;
 	int right_bumb_num_temp = right_bumb_num-1;
 	while(right_bumb_num_temp>=0){
-		if(right_bumb[right_bumb_num_temp][2]<left_player[0][2])
-			break;
-		else if(right_bumb[0][2]>=left_player[left_player_num_temp][2]){
-			for(int i=0; i<right_bumb_num_temp; i++){
-				add(right_bumb[i][0], right_bumb[i][1], right_bumb[i][3]);
-			}
-			break;
-		}
 		if(right_bumb[right_bumb_num_temp][2]>=left_player[left_player_num_temp][2]){
-		add(right_bumb[right_bumb_num_temp][0], right_bumb[right_bumb_num_temp][1], right_bumb[right_bumb_num_temp][3]);
+			add(right_bumb[right_bumb_num_temp][0], right_bumb[right_bumb_num_temp][1], right_bumb[right_bumb_num_temp][3]);
+			right_bumb[right_bumb_num_temp][4]=1;
 			right_bumb_num_temp--;
 		}
 		else{
@@ -93,10 +86,9 @@ void find_damage_rec(int start, int end, int N, vector<vector<long long>> &event
 		left_player[i][3] = get(left_player[i][1]);
 	for(int i=0; i<left_player_num; i++)
 		event_record[left_player[i][0]][4] += left_player[i][3];
-	if(right_bumb_num==1)
-		add(right_bumb[0][0], right_bumb[0][1], -1*right_bumb[0][3]);
-	else
-		reset();
+	for(int i=0; i<right_bumb_num; i++)
+		if(right_bumb[i][4])
+			add(right_bumb[i][0], right_bumb[i][1], -1*right_bumb[i][3]);
 }
 
 int main(){
