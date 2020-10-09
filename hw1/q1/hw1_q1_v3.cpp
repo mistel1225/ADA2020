@@ -36,7 +36,7 @@ long long shortest_dist_brute(vector<vector<long long>> &coord_vector, long long
 }
 
 long long shortest_dist(vector<vector<long long>> &coord_vector, long long first, long long last){
-	if(last-first<=3){
+	if(last-first<=2){
 		return shortest_dist_brute(coord_vector, first, last);
 	}
 	long long mid = (last+first)/2;
@@ -50,33 +50,27 @@ long long shortest_dist(vector<vector<long long>> &coord_vector, long long first
 	vector<vector<long long>> strip_vector(last-first, vector<long long>(2));
 	long long strip_size = 0;
 	for(long long i=first; i<last; i++){
-		if(abs((coord_vector[i][0]-coord_vector[mid][0])*(coord_vector[i][0]-coord_vector[mid][0])) < d){
+		if((coord_vector[i][0]-coord_vector[mid][0])*(coord_vector[i][0]-coord_vector[mid][0]) < d){
 			strip_vector[strip_size][0] = coord_vector[i][0];
 			strip_vector[strip_size][1] = coord_vector[i][1];
 			strip_size++;
 		}
 	}
-	if(strip_size<=6){
-		long long distance = shortest_dist_brute(strip_vector, 0, strip_size);
-		if(d>distance)
-			d=distance;	
+	sort(strip_vector.begin(), strip_vector.begin()+strip_size, sortcol);	
+	#ifdef DEBUG
+	cout<<"=====strip_vector======"<<endl;
+	for(int i=0; i<strip_size; i++){
+		cout<<"strip x, y = "<<strip_vector[i][0]<<" "<<strip_vector[i][1]<<endl;
 	}
-	else{
-		sort(strip_vector.begin(), strip_vector.begin()+strip_size, sortcol);	
-		#ifdef DEBUG
-		cout<<"=====strip_vector======"<<endl;
-		for(int i=0; i<strip_size; i++){
-			cout<<"strip x, y = "<<strip_vector[i][0]<<" "<<strip_vector[i][1]<<endl;
-		}
-		#endif
-		for(long long i=0; i < strip_size; ++i){
-			for(long long j=i+1; j<=i+8&&j<strip_size; ++j){
-				if(d > dist(strip_vector[i][0], strip_vector[i][1], strip_vector[j][0], strip_vector[j][1])){
-					d = dist(strip_vector[i][0], strip_vector[i][1], strip_vector[j][0], strip_vector[j][1]);
-				}
+	#endif
+	for(long long i=0; i < strip_size; ++i){
+		for(long long j=i+1; j<=i+3&&j<strip_size; ++j){
+			if(d > dist(strip_vector[i][0], strip_vector[i][1], strip_vector[j][0], strip_vector[j][1])){
+				d = dist(strip_vector[i][0], strip_vector[i][1], strip_vector[j][0], strip_vector[j][1]);
 			}
 		}
-	}	
+	}
+	
 	return d;
 }
 
@@ -91,10 +85,7 @@ int main(){
 	sort(coord_vector.begin(), coord_vector.end());
 	
 	long long min=0;
-	if(N<=5000)
-		min = shortest_dist_brute(coord_vector, 0, N);
-	else
-		min = shortest_dist(coord_vector, 0, N);
+	min = shortest_dist(coord_vector, 0, N);
 	cout<<-1*min<<endl;
 	return 0;
 }
