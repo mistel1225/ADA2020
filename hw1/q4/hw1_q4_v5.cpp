@@ -25,6 +25,8 @@ void get_path(long long n, long long m, long long p, vector<vector<vector<cell>>
 }
 
 int main(){
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(nullptr);
 	long long n, m, k, c;
 	cin>>n>>m>>k>>c;
 	long long sweetness[n+1][m+1];
@@ -143,19 +145,9 @@ int main(){
 	long long p=0;
     //start from dimension 2
 	if(opt[n][m][0].k != k){
-		p++;
 		long long i=0, j=0, sol_top, sol_left, sol_jump;
-		while(1){
-			#ifdef DEBUG1
-			for(i=0; i<=n; i++){
-				for(j=0; j<=m; j++){
-					cout<<opt[i][j].capacity()<<" ";
-				}
-				cout<<endl;
-			}
-			#endif
-			//initialize opt[0][0][p] on p dim
-			
+		for(p=1; p<=k; p++){
+			//initialize opt[0][0][p] on p dim			
 			if(opt[0][0][p-1].total_sweet - (opt[0][0][p-1].k+1)*c >= 0){
 				opt[1][1][p].total_sweet = opt[0][0][p-1].total_sweet + sweetness[1][1] - (opt[0][0][p-1].k+1)*c;
 				opt[1][1][p].i = 1;
@@ -318,19 +310,12 @@ int main(){
 					}
 				}
 			}
-			#ifdef DEBUG
-			cout<<"=========================="<<endl;
-			cout<<"local k in dim "<<p<<" = "<<opt[n][m][p].k<<endl;
-			cout<<"local sol in dim "<<p<<" = "<<opt[n][m][p].total_sweet<<endl;
-			#endif
-			if(opt[n][m][p].k == k or opt[0][0][p].k == k or opt[n][m][p].total_sweet<=opt[n][m][p-1].total_sweet or opt[0][0][p].total_sweet<=opt[0][0][p-1].total_sweet or p==9){
-        		if(opt[n][m][p].total_sweet<=opt[n][m][p-1].total_sweet){
+			if(opt[n][m][p].total_sweet>opt[0][0][p].total_sweet or opt[0][0][p].k == k or opt[n][m][p].total_sweet<=opt[n][m][p-1].total_sweet or opt[0][0][p].total_sweet<=opt[0][0][p-1].total_sweet){
+				if(opt[n][m][p].total_sweet <= opt[n][m][p-1].total_sweet){
 					p--;
 				}
 				break;
 			}
-        	else
-            	p++;
 		}
 	}
 	cout<<opt[n][m][p].total_sweet<<endl;
@@ -338,7 +323,7 @@ int main(){
 	get_path(n, m, p, opt, path_record);
 	cout<<path_record.size()<<endl;
 	for(long long i=0; i<path_record.size(); i++){
-		cout<<path_record[i]<<endl;
+		cout<<path_record[i]<<"\n";
 	}
 	return 0;
 }
