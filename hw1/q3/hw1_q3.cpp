@@ -113,6 +113,8 @@ long long ADA_party_rec(int first, int last, int K, long long &candies, long lon
         mod_array_left[(prefix_sum[r+1]-candies[max]-candies[min])%K]++;
         l--;
     }
+	//todo:min in the left, max in the right
+	//todo:max in the left, min in the right
 }
 
 int main(){
