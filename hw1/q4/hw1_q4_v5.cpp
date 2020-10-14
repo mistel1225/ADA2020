@@ -310,7 +310,7 @@ int main(){
 					}
 				}
 			}
-			if(opt[n][m][p].total_sweet>opt[0][0][p].total_sweet or opt[0][0][p].k == k or opt[n][m][p].total_sweet<=opt[n][m][p-1].total_sweet or opt[0][0][p].total_sweet<=opt[0][0][p-1].total_sweet){
+			if(opt[n][m][p].total_sweet>opt[0][0][p].total_sweet or opt[0][0][p].k == k /*or opt[n][m][p].total_sweet<=opt[n][m][p-1].total_sweet or opt[0][0][p].total_sweet<=opt[0][0][p-1].total_sweet*/){
 				if(opt[n][m][p].total_sweet <= opt[n][m][p-1].total_sweet){
 					p--;
 				}
