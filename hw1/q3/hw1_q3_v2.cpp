@@ -49,8 +49,8 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 		mod_array_right[prefix_sum[r+1]%K]++;
 		r++;
 	}
-	if(flag==1)
-		l--;
+	/*if(flag==1)
+		l--;*/
 	while(l>=first){
 		if(candies[l]>candies[max])
 			max=l;
@@ -103,8 +103,8 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 	    mod_array_left[prefix_sum[l]%K]++;
 	    l--;
 	}
-    if(flag==1)
-        r++;
+    /*if(flag==1)
+        r++;*/
     while(r<=last){
         if(candies[r]>candies[max])
             max=l;
@@ -154,9 +154,9 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 		mod_array_right[(prefix_sum[r+1]-candies[max])%K]++;
 		r++;
 	}
-	if(flag==1)
-		l--;
-    while(l>=first&&illegal_flag==0){
+	/*if(flag==1)
+		l--;*/
+    while(l>=first){
         if(candies[l]<candies[min])
             min=l;
         mod_array_left[(prefix_sum[l]+candies[min])%K]++;
@@ -204,9 +204,9 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 		mod_array_right[(prefix_sum[r+1]-candies[min])%K]++;
 		r++;
 	}
-	if(flag==1)
-		l--;
-	while(l>=first && illegal_flag==0){
+	/*if(flag==1)
+		l--;*/
+	while(l>=first){
 		if(candies[l]>candies[max])
 			max=l;
 		mod_array_left[(prefix_sum[l]+candies[max])%K]++;
