@@ -15,46 +15,46 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 	//case1: both max and min are in the left
 	int l=mid, r=mid+1;
 	int max=l, min=l;
-	bool flag=0;
 	while(r<=last){
-		//illegal
+		//make sure the property.
 		if(candies[r]>candies[max]){
+			max=r;
 			while(l>=first){
-				if(candies[l]>=candies[r]){
-					max = l;
-					mod_array_left[(prefix_sum[l]+candies[max]+candies[min])%K]++;
-					flag=1;
+				if(candies[l]>candies[max]){
+					max=l;
 					break;
 				}
-				else if(candies[l]<=candies[min])
-					min = l;
-				l--;
-			}	
-		}
-		if(candies[r]<candies[min]){
-			while(l>=first){
-				if(candies[l]<=candies[r]){
-					min = l;
-					mod_array_left[(prefix_sum[l]+candies[max]+candies[min])%K]++;
-					flag=1;
-					break;
-				}
-				else if(candies[l]>=candies[max])
-					max = l;
+				if(candies[l]<candies[min])
+					min=l;
 				l--;
 			}
 		}
-		if(l<first)
+		if(candies[r]<candies[min]){
+			min=r;
+			while(l>=first){
+				if(candies[l]<candies[min]){
+					min=l;
+					break;
+				}
+				if(candies[l]>candies[max])
+					max=l;
+				l--;
+			}
+		}
+		if(l>=first){
+			mod_array_left[(prefix_sum[l]+candies[max]+candies[min])%K]++;
+			l--;
+		}
+		//couldn't make sure the property
+		else if(l<first)
 			break;
 		mod_array_right[prefix_sum[r+1]%K]++;
 		r++;
 	}
-	if(flag==1)
-		l--;
 	while(l>=first){
-		if(candies[l]>=candies[max])
+		if(candies[l]>candies[max])
 			max=l;
-		if(candies[l]<=candies[min])
+		if(candies[l]<candies[min])
 			min=l;
 		mod_array_left[(prefix_sum[l]+candies[max]+candies[min])%K]++;
 		l--;
@@ -65,46 +65,46 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 	//case2: both max and min are in the right
     l=mid, r=mid+1;
     max=r, min=r;
-    flag=0;
 	for(int i=0; i<K; i++){
 		mod_array_left[i]=0;
 		mod_array_right[i]=0;
 	}
     while(l>=first){
-	    //illegal
-	    if(candies[l]>=candies[max]){
-	        while(r<=last){
-	            if(candies[r]>candies[l]){
-	                max = r;
-	                mod_array_right[(prefix_sum[r+1]-candies[max]-candies[min])%K]++;
-	                flag=1;
-	                break;
-	            }
-	            else if(candies[r]<candies[min])
-	                min = r;
-	            r++;
-	        }
-	    }
-	    if(candies[l]<=candies[min]){
-	        while(r<=last){
-	            if(candies[r]<candies[l]){
-	                min = r;
-	                mod_array_right[(prefix_sum[r+1]-candies[max]-candies[min])%K]++;
-	                flag=1;
-	                break;
-	            }
-	            else if(candies[r]>candies[max])
-	                max = l;
-	            r++;
-	        }
-	    }
-	    if(r>last)
-	        break;
-	    mod_array_left[prefix_sum[l]%K]++;
-	    l--;
-	}
-    if(flag==1)
-        r++;
+        //make sure the property.
+        if(candies[l]>candies[max]){
+            max=l;
+            while(r<=last){
+                if(candies[r]>candies[max]){
+                    max=r;
+                    break;
+                }
+                if(candies[r]<candies[min])
+                    min=r;
+                r++;
+            }   
+        }   
+        if(candies[l]<candies[min]){
+            min=l;
+            while(r<=last){
+                if(candies[r]<candies[min]){
+                    min=r;
+                    break;
+                }
+                if(candies[r]>candies[max])
+                    max=r;
+                r++;
+            }   
+        }   
+        if(r<=last){
+            mod_array_right[(prefix_sum[r+1]-candies[max]-candies[min])%K]++;
+            r++;
+        }   
+        //couldn't make sure the property
+        else if(r>last)
+            break;
+        mod_array_left[prefix_sum[l]%K]++;
+        l--;
+    }
     while(r<=last){
         if(candies[r]>candies[max])
             max=l;
@@ -118,98 +118,98 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 	//case3 :min in the left, max in the right
 	l=mid, r=mid+1;
     max=r, min=l;
-    flag=0;
     for(int i=0; i<K; i++){
         mod_array_left[i]=0;
         mod_array_right[i]=0;
     }
 	while(r<=last){
+		//make sure the property
 		if(candies[min]>candies[r]){
-			/*while(l>=first){
-				if(candies[l]<=candies[r]){
-					min = l;
-					mod_array_left[(prefix_sum[l]+candies[min])%K]++;
-					flag=1;
-					break;
-				}
-				if(candies[l]>=candies[max]){
-					while(r<=last){
-						if(candies[r]>candies[l]){
-							max = r;
-							break;
-						}
-						r++;
-					}
-					if(r>last)
-
-				}
-				l--;
-			}*/
-		}
-		if(l<first||r>last)
-			break;
-		if(candies[r]>candies[max])
-			max = r;
-		mod_array_right[(prefix_sum[r+1]-candies[max])%K]++;
-		r++;
-	}
-	if(flag==1)
-		l--;
-    while(l>=first){
-        if(candies[l]<=candies[min])
-            min=l;
-        mod_array_left[(prefix_sum[l]+candies[min])%K]++;
-        l--;
-    }
-	for(int i=0; i<K; i++){
-		sumM+=mod_array_left[i]*mod_array_right[i];
-	}
-	//case 4:max in the left, min in the right
-    l=mid, r=mid+1;
-    max=l, min=r;
-    flag=0;
-	illegal_flag=0;
-    for(int i=0; i<K; i++){
-        mod_array_left[i]=0;
-        mod_array_right[i]=0;
-    }
-	while(r<=last){
-		if(candies[r]>candies[max]){
+			min=r;
 			while(l>=first){
-				if(candies[l]>=candies[r]){
-					max=l;
-					mod_array_left[(prefix_sum[l]+candies[max])%K]++;
-					flag=1;
-					break;
+				if(candies[l]<candies[min]){
+					min=l;
+					break;	
 				}
-				if(candies[l]<=candies[min]){
-					while(r<=last){
-						if(candies[l]>candies[min]){
-							min=r;
-							break;
-						}
-						r++;
-					}
+				if(candies[l]>candies[max]){
+					max=l;
 				}
 				l--;
 			}
 		}
-		if(l<first||r>last){
-			illegal_flag=1;
+		//couldn't make sure the property.
+		if(l<first)
 			break;
+		//could make sure the property
+		if(candies[r]>candies[max]){
+            mod_array_left[(prefix_sum[l]+candies[min])%K]++;
+            l--;
+			max = r;
+			mod_array_right[(prefix_sum[r+1]-candies[max])%K]++;
 		}
-		if(candies[r]<candies[min])
-			min=r;
-		mod_array_right[(prefix_sum[r+1]-candies[min])%K]++;
+		else if(max>=mid+1&&min<=mid){
+			mod_array_left[(prefix_sum[l]+candies[min])%K]++;
+			l--;
+			mod_array_right[(prefix_sum[r+1]-candies[max])%K]++;
+		}
 		r++;
 	}
-	/*if(flag==1)
-		l--;*/
-	while(l>=first){
-		if(candies[l]>=candies[max])
-			max=l;
-		mod_array_left[(prefix_sum[l]+candies[max])%K]++;
-		l--;
+	if(max>=mid+1&&min<=mid){
+    	while(l>=first&&max>=mid+1&&min<=mid){
+        	if(candies[l]<candies[min])
+           		min=l;
+        	mod_array_left[(prefix_sum[l]+candies[min])%K]++;
+    	   	l--;
+		}
+	}
+	for(int i=0; i<K; i++)
+		sumM+=mod_array_left[i]*mod_array_right[i];
+	//case 4:max in the left, min in the right
+    l=mid, r=mid+1;
+    max=l, min=r;
+    for(int i=0; i<K; i++){
+        mod_array_left[i]=0;
+        mod_array_right[i]=0;
+    }
+	while(r<=last){
+		//make sure the property
+		if(candies[r]>candies[max]){
+			max=r;
+			while(l>=first){
+				if(candies[l]>candies[max]){
+					max=l;
+					break;
+				}
+				if(candies[l]<candies[min]){
+					min=l;
+				}
+				l--;
+			}
+		}
+		//couldn't make sure the property
+		if(l<first)
+			break;
+		//could make sure the property
+		if(candies[r]<candies[min]){
+			mod_array_left[(prefix_sum[l]+candies[max])%K]++;
+            l--;
+			min=r;
+			mod_array_right[(prefix_sum[r+1]-candies[min])%K]++;
+		}
+		else if(min>=mid+1&&max<=mid){
+			mod_array_left[(prefix_sum[l]+candies[max])%K]++;
+            l--;
+			mod_array_right[(prefix_sum[r+1]-candies[min])%K]++;
+		}
+		r++;
+	}
+	if(max<=mid&&min>=mid+1){
+		while(l>=first){
+			if(candies[l]>candies[max])
+				max=l;
+			mod_array_left[(prefix_sum[l]+candies[max])%K]++;
+			l--;
+		}
 	}
 	for(int i=0; i<K; i++)
 		sumM += mod_array_left[i]*mod_array_right[i];
