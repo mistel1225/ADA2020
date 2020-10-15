@@ -68,7 +68,7 @@ long long ADA_party_rec(int first, int last, int K, long long &candies, long lon
     flag=0;
 	for(int i=0; i<K; i++){
 		mod_array_left[i]=0;
-		mad_array_right[i]=0;
+		mod_array_right[i]=0;
 	}
     while(l>=first){
 	    //illegal
@@ -113,7 +113,30 @@ long long ADA_party_rec(int first, int last, int K, long long &candies, long lon
         mod_array_left[(prefix_sum[r+1]-candies[max]-candies[min])%K]++;
         l--;
     }
-	//todo:min in the left, max in the right
+	//case:min in the left, max in the right
+	l=mid, r=mid+1;
+    max=r, min=l;
+    flag=0;
+    for(int i=0; i<K; i++){
+        mod_array_left[i]=0;
+        mod_array_right[i]=0;
+    }
+	while(r<=last){
+		if(candies[min]>candies[r]){
+			while(l>=first){
+				if(candies[l]<=candies[r]){
+					min = l;
+					mod_array_left[(prefix_sum[l]+candies[min])%K];
+					flag=1;
+					break;
+				}
+				if(candies[l]>=candies[max]){
+					while()
+				}
+			}
+		}
+	}
+
 	//todo:max in the left, min in the right
 }
 
