@@ -2,7 +2,7 @@
 #include <vector>
 using namespace std;
 //#define DEBUG
-long long ADA_party_rec(int first, int last, int K, long long candies[], long long prefix_sum[]){
+long long ADA_party_rec(int first, int last, int K, long long *candies, long long *prefix_sum){
 	int mid = (first+last)/2;
 	if(last-first+1==1)
 		return 0;
@@ -221,12 +221,14 @@ int main(){
 	cin.tie(nullptr);
 	int N, K;
 	cin>>N>>K;
-	long long candies[N]={0};
-	long long prefix_sum[N+1]={0};
+	long long *candies = new long long[N];
+	long long *prefix_sum=new long long[N+1];
 	for(int i=0; i<N; i++)
 		cin>>candies[i];
-	for(int i=1; i<=N; i++)
+	prefix_sum[0]=0;
+	for(int i=1; i<=N; i++){
 		prefix_sum[i] = prefix_sum[i-1]+candies[i-1];
+	}
 	long long sum = ADA_party_rec(0, N-1, K, candies, prefix_sum);
-	cout<<sum<<endl;
+	cout<<sum<<'\n';
 }
