@@ -1,5 +1,5 @@
 #include <iostream>
-#include <vector>
+#include <cstdlib>
 using namespace std;
 //#define DEBUG
 long long ADA_party_rec(int first, int last, int K, long long candies[], long long prefix_sum[]){
@@ -20,7 +20,7 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 		//illegal
 		if(candies[r]>candies[max]){
 			while(l>=first){
-				if(candies[l]>=candies[r]){
+				if(candies[l]>candies[r]){
 					max = l;
 					mod_array_left[(prefix_sum[l]+candies[max]+candies[min])%K]++;
 					flag=1;
@@ -33,7 +33,7 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 		}
 		else if(candies[r]<candies[min]){
 			while(l>=first){
-				if(candies[l]<=candies[r]){
+				if(candies[l]<candies[r]){
 					min = l;
 					mod_array_left[(prefix_sum[l]+candies[max]+candies[min])%K]++;
 					flag=1;
@@ -52,9 +52,9 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 	if(flag==1)
 		l--;
 	while(l>=first){
-		if(candies[l]>=candies[max])
+		if(candies[l]>candies[max])
 			max=l;
-		else if(candies[l]<=candies[min])
+		else if(candies[l]<candies[min])
 			min=l;
 		mod_array_left[(prefix_sum[l]+candies[max]+candies[min])%K]++;
 		l--;
@@ -72,7 +72,7 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 	}
     while(l>=first){
 	    //illegal
-	    if(candies[l]>=candies[max]){
+	    if(candies[l]>candies[max]){
 	        while(r<=last){
 	            if(candies[r]>candies[l]){
 	                max = r;
@@ -85,7 +85,7 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 	            r++;
 	        }
 	    }
-	    else if(candies[l]<=candies[min]){
+	    else if(candies[l]<candies[min]){
 	        while(r<=last){
 	            if(candies[r]<candies[l]){
 	                min = r;
@@ -127,13 +127,13 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 	while(r<=last){
 		if(candies[min]>candies[r]){
 			while(l>=first){
-				if(candies[l]<=candies[r]){
+				if(candies[l]<candies[r]){
 					min = l;
 					mod_array_left[(prefix_sum[l]+candies[min])%K]++;
 					flag=1;
 					break;
 				}
-				if(candies[l]>=candies[max]){
+				if(candies[l]>candies[max]){
 					while(r<=last){
 						if(candies[r]>candies[l]){
 							max = r;
@@ -157,7 +157,7 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 	if(flag==1)
 		l--;
     while(l>=first&&illegal_flag==0){
-        if(candies[l]<=candies[min])
+        if(candies[l]<candies[min])
             min=l;
         mod_array_left[(prefix_sum[l]+candies[min])%K]++;
         l--;
@@ -177,13 +177,13 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 	while(r<=last){
 		if(candies[r]>candies[max]){
 			while(l>=first){
-				if(candies[l]>=candies[r]){
+				if(candies[l]>candies[r]){
 					max=l;
 					mod_array_left[(prefix_sum[l]+candies[max])%K]++;
 					flag=1;
 					break;
 				}
-				if(candies[l]<=candies[min]){
+				if(candies[l]<candies[min]){
 					while(r<=last){
 						if(candies[l]>candies[min]){
 							min=r;
@@ -207,7 +207,7 @@ long long ADA_party_rec(int first, int last, int K, long long candies[], long lo
 	if(flag==1)
 		l--;
 	while(l>=first && illegal_flag==0){
-		if(candies[l]>=candies[max])
+		if(candies[l]>candies[max])
 			max=l;
 		mod_array_left[(prefix_sum[l]+candies[max])%K]++;
 		l--;
@@ -229,5 +229,6 @@ int main(){
 	for(int i=1; i<=N; i++)
 		prefix_sum[i] = prefix_sum[i-1]+candies[i-1];
 	long long sum = ADA_party_rec(0, N-1, K, candies, prefix_sum);
-	cout<<sum<<endl;
+	printf("%lld\n", sum);
+	return 0;
 }
