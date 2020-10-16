@@ -58,32 +58,15 @@ long long ADA_party_rec(int first, int last, int K, long long *candies, long lon
 	long long mod_array[K]= {0};	
 	//case1: both max and min are in the left
 	l=mid, r=mid+1;
-	while(r<=last){
-		//make sure the property
-		if(maxL[l]>maxR[r] && minL[l]<minR[r]){
-			mod_array[prefix_sum[r+1]%K]++;
-			sumM+=mod_array[(prefix_sum[l]+maxL[l]+minL[l])%K];
-			l--;
-		}
-		//try to make sure the property
-		else if(maxL[l]<maxR[r] || minL[l]>minR[r]){
-			while(l>=first){
-				if(maxL[l]>maxR[r] && minL[l]<minR[r])
-					break;
-				l--;
-			}
-			//cannot make sure the property
-			if(l<first)
-				break;
-			else if(maxL[l]>maxR[r] && minL[l]<minR[r]){
-				mod_array[prefix_sum[r+1]%K]++;
-				sumM+=mod_array[(prefix_sum[l]+maxL[l]+minL[l])%K];
-				l--;
-			}
-		}
-		r++;
-	}
 	while(l>=first){
+		while(r<=last){
+			if(maxL[l]>maxR[r] && minL[l]<minR[r]){
+				mod_array[prefix_sum[r+1]%K]++;
+				r++;
+			}
+			else
+				break;
+		}
 		sumM+=mod_array[(prefix_sum[l]+maxL[l]+minL[l])%K];
 		l--;
 	}
@@ -91,30 +74,15 @@ long long ADA_party_rec(int first, int last, int K, long long *candies, long lon
 	l=mid, r=mid+1;
 	for(int i=0; i<K; i++)
 		mod_array[i] = 0;
-	while(l>=first){
-		//make sure the property
-		if(maxR[r]>maxL[l] && minR[r]<minL[l]){
-			mod_array[prefix_sum[l]%K]++;
-			sumM+=mod_array[(prefix_sum[r+1]-minR[r]-maxR[r])%K];
-			r++;
-		}
-		else if(maxR[r]<maxL[l] || minR[r]>minL[l]){
-			while(r<=last){
-				if(maxR[r]>maxL[l] && minR[r]<minL[l])
-					break;
-				r++;
-			}
-			if(r>last)
-				break;
-			else if(maxR[r]>maxL[l] && minR[r]<minL[l]){
-				mod_array[prefix_sum[l]%K]++;
-				sumM+=mod_array[(prefix_sum[r+1]-maxR[r]-minR[r])%K];
-				r++;
-			}
-		}
-		l--;
-	}
 	while(r<=last){
+		while(l>=first){
+			if(maxR[r]>maxL[l] && minR[r]<minL[l]){
+				mod_array[prefix_sum[l]%K]++;
+				l--;
+			}
+			else
+				break;
+		}
 		sumM+=mod_array[(prefix_sum[r+1]-maxR[r]-minR[r])%K];
 		r++;
 	}
@@ -123,60 +91,32 @@ long long ADA_party_rec(int first, int last, int K, long long *candies, long lon
 	l=mid, r=mid+1;
 	for(int i=0; i<K; i++)
 		mod_array[i] = 0;
-	while(r<=last){
-		if(maxL[l]>maxR[r] && minR[r]<minL[l]){
-			mod_array[(prefix_sum[r+1]-minR[r])%K]++;
-			sumM+=mod_array[(prefix_sum[l]+maxL[l])%K];
-			l--;
-		}
-		else if(maxL[l]<maxR[r]){
-			while(l>=first){
-				if(maxL[l]>maxR[r])
-					break;
-				l--;
-			}
-			if(l<first)
-				break;
-			else if(maxL[l]>maxR[r] && minR[r]<minL[l]){
-				mod_array[(prefix_sum[r+1]-minR[r])%K]++;
-				sumM+=mod_array[(prefix_sum[l]+maxL[l])%K];
-				l--;
-			}
-		}
-		r++;
-	}
 	while(l>=first){
+		while(r<=last){
+			if(minR[r]<minL[l]&&maxR[r]<maxL[l]){
+				mod_array[(prefix_sum[r+1]-minR[r])%K]++;
+				r++;
+			}
+			else if(minR[r]>minL[l]||maxR[r]>maxL[l])
+				break;
+		}
 		sumM+=mod_array[(prefix_sum[l]+maxL[l])%K];
 		l--;
 	}
 	
-	//case4: max in the left, min in the right
+	//case4: max in the right, min in the left
 	l=mid, r=mid+1;
 	for(int i=0; i<K; i++)
 		mod_array[i] = 0;
-	while(r<=last){
-		if(minL[l]<minR[r] && maxR[r]>maxL[l]){
-			mod_array[(prefix_sum[r+1]-maxR[r])%K]++;
-			sumM+=mod_array[(prefix_sum[l]+minL[l])%K];
-			l--;
-		}
-		else if(minL[l]>minR[r]){
-			while(l>=first){
-				if(minL[l]<minR[r])
-					break;
-				l--;
-			}
-			if(l<first)
-				break;
-			else if(minL[l]<minR[r] && maxR[r]>maxL[l]){
-				mod_array[(prefix_sum[r+1]-maxR[r])%K]++;
-				sumM+=mod_array[(prefix_sum[l]+minL[l])%K];
-				l--;
-			}
-		}
-		r++;
-	}
 	while(l>=first){
+		while(r<=last){
+			if(maxR[r]>maxL[l] && minR[r]>minL[l]){
+				mod_array[(prefix_sum[r+1]-maxR[r])%K]++;
+				r++;
+			}
+			else if(maxR[r]<maxL[l] || minR[r]<minL[l])
+				break;
+		}
 		sumM+=mod_array[(prefix_sum[l]+minL[l])%K];
 		l--;
 	}
