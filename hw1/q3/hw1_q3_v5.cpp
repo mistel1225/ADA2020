@@ -1,5 +1,5 @@
 #include <iostream>
-#include <vector>
+#include <cmath>
 using namespace std;
 //#define DEBUG
 
@@ -44,7 +44,7 @@ long long ADA_party_rec(long long first, long long last, long long K, long long 
 	l=mid, r=mid+1;
 	while(l>=first){
 		while(r<=last){
-			if(max[l]>=max[r] && min[l]<=min[r]){
+			if(max[l]>max[r] && min[l]<=min[r]){
 				mod_array[prefix_sum[r+1]%K]++;
 				r++;
 			}
@@ -61,14 +61,17 @@ long long ADA_party_rec(long long first, long long last, long long K, long long 
 	l=mid, r=mid+1;
 	while(r<=last){
 		while(l>=first){
-			if(max[r]>max[l] && min[r]<min[l]){
+			if(max[r]>=max[l] && min[r]<min[l]){
 				mod_array[prefix_sum[l]%K]++;
 				l--;
 			}
 			else
 				break;
 		}
-		sumM+=mod_array[(prefix_sum[r+1]-max[r]-min[r])%K];
+		#ifdef DEBUG
+		cout<<prefix_sum[r+1]-max[r]-min[r]<<endl;
+		#endif
+		sumM+=mod_array[abs((prefix_sum[r+1]-max[r]-min[r]))%K];
 		r++;
 	}
 	for(long long i=first; i<=mid; i++)
@@ -83,44 +86,49 @@ long long ADA_party_rec(long long first, long long last, long long K, long long 
 				if(max[q]>=max[l])
 					break;
 				else if(q>=p)
-					mod_array[(prefix_sum[q+1]-min[q])%K]+=1;
+					mod_array[abs((prefix_sum[q+1]-min[q]))%K]+=1;
 				q++;
 			}
 			while(p<=last){
 				if(min[p]<min[l])
 					break;
 				else if(p<q)
-					mod_array[(prefix_sum[p+1]-min[p])%K]-=1;
+					mod_array[abs((prefix_sum[p+1]-min[p]))%K]-=1;
 				p++;
 			}
 		sumM+=mod_array[(prefix_sum[l]+max[l])%K];
 		l--;
 	}
 	for(long long i=mid+1; i<=last; i++)
-		mod_array[(prefix_sum[i+1]-min[i])%K]=0;
+		mod_array[abs((prefix_sum[i+1]-min[i]))%K]=0;
 	//case4: max in the right, min in the left
 	l=mid, r=mid+1;
 	p=r, q=r;
 	while(l>=first){
 			while(q<=last){
-                if(min[q]<=min[l])
+                if(min[q]<min[l])
                     break;
                 else if(q>=p)
-                    mod_array[(prefix_sum[q+1]-max[q])%K]+=1;
+                    mod_array[abs((prefix_sum[q+1]-max[q]))%K]+=1;
 				q++;
             }
             while(p<=last){
-                if(max[p]>max[l])
+                if(max[p]>=max[l])
                     break;
                 else if(p<q)
-                    mod_array[(prefix_sum[p+1]-max[p])%K]-=1;
+                    mod_array[abs((prefix_sum[p+1]-max[p]))%K]-=1;
 				p++;
             }
 		sumM+=mod_array[(prefix_sum[l]+min[l])%K];
 		l--;
 	}
 	for(long long i=mid+1; i<=last; i++)
-		mod_array[(prefix_sum[i+1]-max[i])%K]=0;
+		mod_array[abs((prefix_sum[i+1]-max[i]))%K]=0;
+	#ifdef DEBUG
+		for(long long i=0; i<K; i++)
+			cout<<mod_array[i]<<" ";
+		cout<<endl;
+	#endif
 	return sumM+sumL+sumR;
 }
 
@@ -145,6 +153,10 @@ int main(){
     }
     long long sum = ADA_party_rec(0, N-1, K, candies, prefix_sum, mod_array);
     cout<<sum<<'\n';
+	free(mod_array);
+	free(candies);
+	free(prefix_sum);
 	return 0;
 }
+
 
