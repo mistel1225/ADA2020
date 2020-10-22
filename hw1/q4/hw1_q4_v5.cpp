@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cstdlib>
 using namespace std;
 //#define DEBUG0
 class cell{
@@ -358,7 +359,7 @@ int main(){
 	get_path(n, m, p, opt, path_record);
 	cout<<path_record.size()<<endl;
 	for(long long i=0; i<path_record.size(); i++){
-		cout<<path_record[i]<<"\n";
+		cout<<path_record[i]<<'\n';
 	}
 	return 0;
 }
