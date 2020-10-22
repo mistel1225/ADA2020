@@ -14,15 +14,14 @@ class cell{
 		long long from_j=1;
 		long long from_l=0;
 		long long k=0;
-		string move_type="";
+		bool move_type;
 };
-void get_path(long long n, long long m, long long p, vector<vector<vector<cell>>> &opt, vector<string> &path_record){
+void get_path(long long n, long long m, long long p, vector<vector<vector<cell>>> &opt, vector<cell> &path_record){
 	if(opt[n][m][p].i==1 && opt[n][m][p].j==1 && opt[n][m][p].l==0){
 		return;
 	}
 	get_path(opt[n][m][p].from_i, opt[n][m][p].from_j, opt[n][m][p].from_l, opt, path_record);
-	path_record.push_back(opt[n][m][p].move_type);
-	path_record[path_record.size()-1]+=" "+to_string(opt[n][m][p].i-1)+" "+to_string(opt[n][m][p].j-1);
+	path_record.push_back(opt[n][m][p]);
 }
 
 int main(){
@@ -36,20 +35,10 @@ int main(){
 			cin>>sweetness[i][j];
 	vector<vector<vector<cell>>>  opt(n+1, vector<vector<cell>>(m+1, vector<cell>(k+1)));
 	//initialize opt
-	/*for(long long i=0; i<=n; i++){
-		opt[i].reserve(m+1);
-		for(long long j=0; j<=m; j++){
-			opt[i][j].reserve(k+2);
-		}
-	}*/
 	//initialize global opt sol on dimension 1
    	opt[0][0][0].total_sweet = sweetness[1][1];
 	opt[0][0][0].i = 1;
 	opt[0][0][0].j = 1;
-	/*opt[0][0][0].l = 0;
-	opt[0][0][0].k = 0;
-	opt[0][0][0].move_type = "Move";
-	*/
 	long long temp_i=1 , temp_j =1;
 	//initialize border case on opt
 	opt[1][1][0].total_sweet = sweetness[1][1];
@@ -66,15 +55,9 @@ int main(){
         opt[i][1][0].from_j = 1;
         opt[i][1][0].from_l = 0;
         opt[i][1][0].k = 0;
-        opt[i][1][0].move_type = "Move";
+        opt[i][1][0].move_type = 0;
 	    if(opt[i][1][0].total_sweet > opt[0][0][0].total_sweet){
           	opt[0][0][0].total_sweet = opt[i][1][0].total_sweet;
-            /*opt[0][0][0].i = i;
-            opt[0][0][0].j = 1;
-            opt[0][0][0].l = 0;
-            opt[0][0][0].from_i = i-1;
-            opt[0][0][0].from_j = 1;
-            opt[0][0][0].from_l = 0;*/
 			temp_i=i;
 			temp_j=1;
         }
@@ -89,15 +72,9 @@ int main(){
 		opt[1][j][0].from_j = j-1;
 		opt[1][j][0].from_l = 0;
 		opt[1][j][0].k = 0;
-		opt[1][j][0].move_type = "Move";
+		opt[1][j][0].move_type = 0;
         if(opt[1][j][0].total_sweet > opt[0][0][0].total_sweet){
             opt[0][0][0].total_sweet = opt[1][j][0].total_sweet;
-            /*opt[0][0][0].i = 1;
-            opt[0][0][0].j = j;
-            opt[0][0][0].l = 0;
-            opt[0][0][0].from_i = 1;
-            opt[0][0][0].from_j = j-1;
-            opt[0][0][0].from_l = 0;*/
 			temp_i = 1;
 			temp_j = j;
         }
@@ -114,7 +91,7 @@ int main(){
 				opt[i][j][0].from_j = j;
 				opt[i][j][0].from_l = 0;
 				opt[i][j][0].k = 0;
-				opt[i][j][0].move_type = "Move";
+				opt[i][j][0].move_type = 0;
 			}
 			//from left
 			else{
@@ -126,16 +103,10 @@ int main(){
                 opt[i][j][0].from_j = j-1;
                 opt[i][j][0].from_l = 0;
                 opt[i][j][0].k = 0;
-                opt[i][j][0].move_type = "Move";
+                opt[i][j][0].move_type = 0;
 			}
 			if(opt[i][j][0].total_sweet > opt[0][0][0].total_sweet){
 				opt[0][0][0].total_sweet = opt[i][j][0].total_sweet;
-				/*opt[0][0][0].i = i;
-				opt[0][0][0].j = j;
-				opt[0][0][0].l = 0;
-				opt[0][0][0].from_i = opt[i][j][0].from_i;
-				opt[0][0][0].from_j = opt[i][j][0].from_j;
-				opt[0][0][0].from_l = opt[i][j][0].from_l;*/
 				temp_i = i;
 				temp_j = j;
 			}
@@ -151,15 +122,6 @@ int main(){
     opt[0][0][0].k = opt[temp_i][temp_j][0].k;
     opt[0][0][0].move_type = opt[temp_i][temp_j][0].move_type;
 	
-	/*#ifdef DEBUG0
-	cout<<"===========(from_i, from_j, from_l) on dim 1==========="<<endl;
-	for(int i=1; i<=n; i++){
-		for(int j=1; j<=m; j++)
-			cout<<"(i, j, l) = "<<opt[i][j][0].from_i<<", "<<opt[i][j][0].from_j<<", "<<opt[i][j][0].from_l<<" ";
-		cout<<endl;
-	}
-	cout<<"global sol on dim 1 = "<<opt[0][0][0].total_sweet<<endl;
-	#endif*/
 	
 	long long p=0;
     //start from dimension 1
@@ -176,7 +138,7 @@ int main(){
 				opt[1][1][p].from_j = opt[0][0][p-1].j;
 				opt[1][1][p].from_l = opt[0][0][p-1].l;
 				opt[1][1][p].k = opt[0][0][p-1].k+1;
-				opt[1][1][p].move_type = "Jump";
+				opt[1][1][p].move_type = 1;
 			}
 			else{
 				opt[1][1][p].total_sweet = sweetness[1][1];
@@ -187,17 +149,9 @@ int main(){
 				opt[1][1][p].from_j = 1;
 				opt[1][1][p].from_l = 0;
 				opt[1][1][p].k = 0;
-				opt[1][1][p].move_type = "Move";
+				opt[1][1][p].move_type = 0;
 			}
             opt[0][0][p].total_sweet = opt[1][1][p].total_sweet;
-            /*opt[0][0][p].i = opt[1][1][p].i;
-            opt[0][0][p].j = opt[1][1][p].j;
-            opt[0][0][p].l = opt[1][1][p].l;
-            opt[0][0][p].from_i = opt[1][1][p].from_i;
-            opt[0][0][p].from_j = opt[1][1][p].from_j;
-            opt[0][0][p].from_l = opt[1][1][p].from_l;
-            opt[0][0][p].k = opt[1][1][p].k;
-            opt[0][0][p].move_type = opt[1][1][p].move_type;*/
 			//deal with border case
     		temp_i=1, temp_j=1;
 			for(i=2; i<=n; i++){
@@ -212,7 +166,7 @@ int main(){
                     opt[i][1][p].from_j = opt[0][0][p-1].j;
                     opt[i][1][p].from_l = opt[0][0][p-1].l;
                     opt[i][1][p].k = opt[0][0][p-1].k+1;
-                    opt[i][1][p].move_type = "Jump";
+                    opt[i][1][p].move_type = 1;
                 }
 				else{
 					opt[i][1][p].total_sweet = sol_top;
@@ -223,19 +177,11 @@ int main(){
         			opt[i][1][p].from_j = 1;
         			opt[i][1][p].from_l = p;
         			opt[i][1][p].k = opt[i-1][1][p].k;
-        			opt[i][1][p].move_type = "Move";
+        			opt[i][1][p].move_type = 0;
 				}
 				//update local opt sol
         		if(opt[i][1][p].total_sweet > opt[0][0][p].total_sweet){
             		opt[0][0][p].total_sweet = opt[i][1][p].total_sweet;
-            		/*opt[0][0][p].i = i;
-            		opt[0][0][p].j = 1;
-            		opt[0][0][p].l = p;
-            		opt[0][0][p].from_i = opt[i][1][p].from_i;
-            		opt[0][0][p].from_j = opt[i][1][p].from_j;
-            		opt[0][0][p].from_l = opt[i][1][p].from_l;
-            		opt[0][0][p].k = opt[i][1][p].k;
-            		opt[0][0][p].move_type = opt[i][1][p].move_type;*/
 					temp_i = i;
 					temp_j = 1;
         		}
@@ -252,7 +198,7 @@ int main(){
                     opt[1][j][p].from_j = opt[0][0][p-1].j;
                     opt[1][j][p].from_l = opt[0][0][p-1].l;
                     opt[1][j][p].k = opt[0][0][p-1].k+1;
-                    opt[1][j][p].move_type = "Jump";
+                    opt[1][j][p].move_type = 1;
                 }
 				else{
                     opt[1][j][p].total_sweet = sol_left;
@@ -263,19 +209,11 @@ int main(){
                     opt[1][j][p].from_j = j-1;
                     opt[1][j][p].from_l = p;
                     opt[1][j][p].k = opt[1][j-1][p].k;
-                    opt[1][j][p].move_type = "Move";
+                    opt[1][j][p].move_type = 0;
                 }
 
                 if(opt[1][j][p].total_sweet > opt[0][0][p].total_sweet){
                     opt[0][0][p].total_sweet = opt[1][j][p].total_sweet;
-                    /*opt[0][0][p].i = 1;
-                    opt[0][0][p].j = j;
-                    opt[0][0][p].l = p;
-                    opt[0][0][p].from_i = opt[1][j][p].from_i;
-                    opt[0][0][p].from_j = opt[1][j][p].from_j;
-                    opt[0][0][p].from_l = opt[1][j][p].from_l;
-                    opt[0][0][p].k = opt[1][j][p].k;
-                    opt[0][0][p].move_type = opt[1][j][p].move_type;*/
 					temp_i = 1;
 					temp_j = j;
                 }
@@ -297,7 +235,7 @@ int main(){
                         opt[i][j][p].from_j = opt[0][0][p-1].j;
                         opt[i][j][p].from_l = opt[0][0][p-1].l;
                         opt[i][j][p].k = opt[0][0][p-1].k+1;
-                        opt[i][j][p].move_type = "Jump";
+                        opt[i][j][p].move_type = 1;
                     }
 					else if(sol_top > sol_left && sol_top > sol_jump){
                	 		opt[i][j][p].total_sweet = sol_top;
@@ -308,7 +246,7 @@ int main(){
                 		opt[i][j][p].from_j = opt[i-1][j][p].j;
                 		opt[i][j][p].from_l = opt[i-1][j][p].l;
                 		opt[i][j][p].k = opt[i-1][j][p].k;
-                		opt[i][j][p].move_type = "Move";
+                		opt[i][j][p].move_type = 0;
 					}
 					else if(sol_left > sol_top && sol_left > sol_jump){
 						opt[i][j][p].total_sweet = sol_left;
@@ -319,18 +257,10 @@ int main(){
                         opt[i][j][p].from_j = opt[i][j-1][p].j;
                         opt[i][j][p].from_l = opt[i][j-1][p].l;
                         opt[i][j][p].k = opt[i][j-1][p].k;
-                        opt[i][j][p].move_type = "Move";
+                        opt[i][j][p].move_type = 0;
 					}
 					if(opt[i][j][p].total_sweet > opt[0][0][p].total_sweet){
 						opt[0][0][p].total_sweet = opt[i][j][p].total_sweet;
-						/*opt[0][0][p].i = i;
-						opt[0][0][p].j = j;
-						opt[0][0][p].l = p;
-						opt[0][0][p].from_i = opt[i][j][p].from_i;
-						opt[0][0][p].from_j = opt[i][j][p].from_j;
-						opt[0][0][p].from_l = opt[i][j][p].from_l;
-						opt[0][0][p].k = opt[i][j][p].k;
-						opt[0][0][p].move_type = opt[i][j][p].move_type;*/
 						temp_i=i;
 						temp_j=j;
 					}
@@ -355,11 +285,19 @@ int main(){
 
 	}
 	cout<<opt[n][m][p].total_sweet<<endl;
-	vector<string> path_record;
+	vector<cell> path_record;
 	get_path(n, m, p, opt, path_record);
 	cout<<path_record.size()<<endl;
 	for(long long i=0; i<path_record.size(); i++){
+<<<<<<< HEAD
 		cout<<path_record[i]<<'\n';
+=======
+		if(path_record[i].move_type==0)
+			cout<<"Move ";
+		else if(path_record[i].move_type==1)
+			cout<<"Jump ";
+		cout<<path_record[i].i-1<<" "<<path_record[i].j-1<<endl;
+>>>>>>> 4ee7f3adf20295ba1b334d23b961f4c7df7c6869
 	}
 	return 0;
 }
