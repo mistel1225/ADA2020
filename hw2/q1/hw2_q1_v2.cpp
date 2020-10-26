@@ -1,6 +1,6 @@
 #include <iostream>
 using namespace std;
-//#define DEBUG
+#define DEBUG
 
 int main(){
 	long long N, K, A, B;
@@ -8,12 +8,12 @@ int main(){
 	long long dp_prev[N];
 	long long dp_curr[N];
 	long long grid[N];
-	long long max;
+	long long max=0;
 	for(long long i=0; i<N; i++){
 		cin>>grid[i];
 		dp_prev[i]=grid[i];
 	}
-	max=dp_prev[0];
+	
 	for(long long i=0; i<N; i++)
 		if(dp_prev[i]>max)
 			max = dp_prev[i];
