@@ -29,26 +29,8 @@ int main(){
 	while(a!=n&&b!=n){
 		if(a<b){
 			if(book_vector[b]==0){
-				while(book_vector[a]!=0){
-					if(abs(b-beauty_arrange.back())==1){
-						beauty_arrange.push_back(b);
-						beauty_arrange.push_back(a);
-						insert_num+=1;
-						book_vector[a]-=1;
-					}
-					else if(abs(a-beauty_arrange.back())==1){
-						beauty_arrange.push_back(a);
-						beauty_arrange.push_back(b);
-						insert_num+=1;
-						book_vector[a]-=1;
-					}
-				}
-				if(abs(b-beauty_arrange.back())==1){
-					beauty_arrange.push_back(b);
-					insert_num+=1;
-				}
-				a=a+2, b=b+2;
-				continue;
+				insert_num+=1;
+				book_vector[b]+=1;
 			}
 			if(book_vector[a]==0){
 				a=a+2;
@@ -104,10 +86,6 @@ int main(){
 			book_vector[b]-=1;
 		}
 	}
-	if(a==n){
-		b=a-1;
-		
-	
 	
 	for(long long i=1; i<=n; i++){
 		if(book_vector[i]!=0){
