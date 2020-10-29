@@ -72,8 +72,41 @@ int main(){
 		if(a<b){
 			if(book_vector[a]<book_vector[b]){
 				beauty_arrange[a]=book_vector[a];
-				book_vector[b]
+				book_vector[b]-=book_vector[a];
+				book_vector[a]=0;
+				if(beauty_arrange_order[a-1]==0)
+					beauty_arrange_order[a]=1;
+				else if(beauty_arrange_order[a-1]==1)
+					beauty_arrange_order[a]=0;
+				a+=2;
+				continue;
 			}
+			else if(book_vector[a]=book_vector[b]){
+				beauty_arrange[a]=book_vector[a];
+				book_vector[b]=0;
+				book_vector[a]=0;
+				if(beauty_arrange_order[a-1]==0)
+					beauty_arrange_order[a]=1;
+				else if(beauty_arrange_order[a-1]==1)
+					beauty_arrange_order[a]=0;
+				a+=2, b+=2;
+				continue;
+			}
+			else if(book_vector[a]>book_vector[b]){
+				insert_num+=(book_vector[a]-book_vector[b]);
+				beauty_arrange[a]=book_vector[a];
+				book_vector[a]=0;
+				book_vector[b]=0;
+				if(beauty_arrange_order[a-1]==0)
+					beauty_arrange_order[a]=1;
+				else if(beauty_arrange_order[a-1]==1)
+					beauty_arrange_order[a]=0;
+				a+=2, b+=2;
+				continue;
+			}
+		}
+		else if(b<a){
+			if(book_vector[a])
 		}
 	}
 
