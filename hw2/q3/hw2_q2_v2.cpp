@@ -81,7 +81,7 @@ int main(){
 				a+=2;
 				continue;
 			}
-			else if(book_vector[a]=book_vector[b]){
+			else if(book_vector[a]==book_vector[b]){
 				beauty_arrange[a]=book_vector[a];
 				book_vector[b]=0;
 				book_vector[a]=0;
@@ -93,7 +93,7 @@ int main(){
 				continue;
 			}
 			else if(book_vector[a]>book_vector[b]){
-				insert_num+=(book_vector[a]-book_vector[b]);
+				insert_num+=(book_vector[a]-book_vector[b]+1);
 				beauty_arrange[a]=book_vector[a];
 				book_vector[a]=0;
 				book_vector[b]=0;
@@ -106,10 +106,47 @@ int main(){
 			}
 		}
 		else if(b<a){
-			if(book_vector[a])
+			if(book_vector[b]<book_vector[a]){
+				beauty_arrange[b]=book_vector[b];
+				book_vector[a]-=book_vector[b];
+				book_vector[b]=0;
+				if(beauty_arrange_order[b-1]==0)
+					beauty_arrange_order[b]=1;
+				else if(beauty_arrange_order[b-1]==1)
+					beauty_arrange_order[b]=0;
+				b+=2;
+				continue;
+			}
+			else if(book_vector[b]==book_vector[a]){
+				beauty_arrange[b]=book_vector[b];
+				book_vector[b]=0;
+				book_vector[a]=0;
+				if(beauty_arrange_order[b-1]==0)
+					beauty_arrange_order[b]=1;
+				else if(beauty_arrange_order[b-1]==1)
+					beauty_arrange_order[b]=0;
+				b+=2;
+				continue;
+			}
+			else if(book_vector[b]>book_vector[a]){
+				insert_num+=(book_vector[b]-book_vector[a]+1);
+				beauty_arrange[b]=book_vector[b];
+				book_vector[a]=0;
+				book_vector[b]=0;
+				if(beauty_arrange_order[b-1]==0)
+					beauty_arrange_order[b]=1;
+				else if(beauty_arrange_order[b-1]==1)
+					beauty_arrange_order[b]=0;
+				b+=2;
+				continue;
+			}
 		}
 	}
-
+	if(book_vector[n]!=0){
+		insert_num+=book_vector[n];
+		beauty_arrange[n]=book_vector[n];
+		 
+	}
 
 
 
