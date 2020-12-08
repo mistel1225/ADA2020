@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 using namespace std;
-#define DEBUG
+//#define DEBUG
 class vertex{
 	public:
 		long long node;
@@ -113,8 +113,16 @@ int main(){
 		for(long long j=1; j<SCC_list[i].size(); j++)
 			if(distance[SCC_list[i][j].node]<distance[i]+SCC_list[i][j].weight+SCC_list[SCC_list[i][j].node][0].weight)
 				distance[SCC_list[i][j].node] = distance[i]+SCC_list[i][j].weight+SCC_list[SCC_list[i][j].node][0].weight;
+	#ifdef DEBUG
 	cout<<"========================"<<endl;
 	for(long long i=0; i<sccCnt; i++)
 		cout<<distance[i]<<" ";
 	cout<<endl;
+	#endif
+	long long max = distance[0];
+	for(long long i=1; i<sccCnt; i++)
+		if(max<distance[i])
+			max = distance[i];
+	cout<<max<<endl;
+	return 0;
 }
