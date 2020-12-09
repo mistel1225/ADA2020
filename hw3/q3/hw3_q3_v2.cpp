@@ -3,6 +3,7 @@
 #include <queue>
 #include <algorithm>
 using namespace std;
+#define DEBUG
 class edge{
 	public:
 		long long v1;
@@ -28,8 +29,6 @@ class node{
 			this->d = d;
 		}
 };
-
-
 bool operator<(const node &n1,const node &n2){
 	return n1.d > n2.d;
 }
@@ -62,63 +61,80 @@ int main(){
 	vector<long long> disjointSet(N);
 	for(long long i=0; i<N; i++)
 		disjointSet[i]=i;
-
-	for(long long i=0; i<edgeList.size(); i++){
-		long long j=i;
-		for(j; j<edgeList.size();j++){
-			if(edgeList[j].weight != edgeList[i].weight){
-				j=j-1;
-				break;
+	
+	long long j=0;
+	for(long long i=1; i<=edgeList.size(); i++){
+		//loop until E_i_weight != E_i+1_weight 
+		if(i<edgeList.size()){
+			while(edgeList[i].weight==edgeList[i-1].weight){
+				i++;
+				if(i>=edgeList.size()){
+					break;
+				}
 			}
 		}
-		if(j==edgeList.size())
-			j=j-1;
-        for(long long k=i; k<=j; k++){
-            if(find(edgeList[k].v1, disjointSet)!=find(edgeList[k].v2, disjointSet)){
-                minSpanTree.push_back(edgeList[k]);
-            }
-        }
-        for(long long k=i; k<=j; k++){
+		for(long long k=j; k<i; k++){
+			if(find(edgeList[k].v1, disjointSet)!=find(edgeList[k].v2, disjointSet)){
+				minSpanTree.push_back(edgeList[k]);
+			}
+		}
+		for(long long k=j; k<i; k++){
             if(find(edgeList[k].v1, disjointSet)!=find(edgeList[k].v2, disjointSet)){
                 set_union(edgeList[k].v1, edgeList[k].v2, disjointSet);
-            }   
-        }
-		i=j;
+            } 	
+		}
+		j=i-1;
 	}
+	#ifdef DEBUG1
+	cout<<"minSpanTree"<<endl;
+	for(long long i=0; i<minSpanTree.size(); i++){
+		cout<<minSpanTree[i].v1+1<<" "<<minSpanTree[i].v2+1<<" "<<minSpanTree[i].weight<<endl;
+	}
+	#endif
 	//adjList && weightMatrix
-	vector<vector<node>> adjList(N);
-	//vector<vector<long long>> weightMatrix(N, vector<long long>(N));
+	vector<vector<long long>> adjList(N);
+	vector<vector<long long>> weightMatrix(N, vector<long long>(N));
 	for(long long i=0; i<minSpanTree.size(); i++){
 		long long v1 = minSpanTree[i].v1;
 		long long v2 = minSpanTree[i].v2;
 		long long weight = minSpanTree[i].weight;
-		adjList[v1].push_back(node(v2, weight));
-		adjList[v2].push_back(node(v1, weight));
-		//weightMatrix[v1][v2] = weight;
-		//weightMatrix[v2][v1] = weight;
+		adjList[v1].push_back(v2);
+		adjList[v2].push_back(v1);
+		weightMatrix[v1][v2] = weight;
+		weightMatrix[v2][v1] = weight;
 	}
-	//dijkstra's
+	//initialize dijkstra's
 	bool visList[N]={0};
 	long long distList[N];
 	for(long long i=0; i<N; i++)
 		distList[i] = 9223372036854775807;
 	distList[S] = 0;
 	priority_queue<node> Q;
-	Q.push(node(S, distList[S]));
-	for(long long i=0; i<N; i++){
-		long long u = -1;
-		while(!Q.empty() && visList[u = Q.top().node_i])
+	for(long long i=0; i<N; i++)
+		Q.push(node(i, distList[i]));
+	#ifdef DEBUG1
+	while(!Q.empty()){
+		cout<<Q.top().node_i<<" "<<Q.top().d<<endl;
+		Q.pop();
+	}
+	#endif
+	while(!Q.empty()){
+		while(visList[Q.top().node_i]==1){
 			Q.pop();
-		if(u==-1)
+			if(Q.empty())
+				break;
+		}
+		if(Q.empty())
 			break;
-		visList[u]=1;
-		for(long long j=0; j<adjList[u].size(); j++){
-			if(!visList[adjList[u][j].node_i] && distList[u] + adjList[u][j].d < distList[adjList[u][j].node_i]){
-				distList[adjList[u][j].node_i] = distList[u] + adjList[u][j].d;
-				Q.push(node(adjList[u][j].node_i, distList[adjList[u][j].node_i]));
+		long long u = Q.top().node_i;
+		Q.pop();
+		visList[u] = 1;
+		for(j=0; j<adjList[u].size(); j++){
+			if(distList[adjList[u][j]]>distList[u]+weightMatrix[u][adjList[u][j]]){
+				distList[adjList[u][j]] = distList[u]+weightMatrix[u][adjList[u][j]];
+				Q.push(node(adjList[u][j], distList[adjList[u][j]]));
 			}
 		}
 	}
 	cout<<distList[T]<<endl;
 }
-
