@@ -105,7 +105,7 @@ int main(){
 	distList[S] = 0;
 	priority_queue<node> Q;
 	Q.push(node(S, distList[S]));
-	for(long long i=0; i<N; i++){
+	/*for(long long i=0; i<N; i++){
 		long long u = -1;
 		while(!Q.empty() && visList[u = Q.top().node_i])
 			Q.pop();
@@ -115,6 +115,26 @@ int main(){
 		for(long long j=0; j<adjList[u].size(); j++){
 			if(!visList[adjList[u][j].node_i] && distList[u] + adjList[u][j].d < distList[adjList[u][j].node_i]){
 				distList[adjList[u][j].node_i] = distList[u] + adjList[u][j].d;
+				Q.push(node(adjList[u][j].node_i, distList[adjList[u][j].node_i]));
+			}
+		}
+	}*/
+	/*for(long long i=0; i<N; i++)
+		Q.push(node(i, distList[i]));*/
+	while(!Q.empty()){
+		while(visList[Q.top().node_i]==1){
+			Q.pop();
+			if(Q.empty())
+				break;
+		}
+		if(Q.empty())
+			break;
+		long long u = Q.top().node_i;
+		Q.pop();
+		visList[u] = 1;
+		for(long long j=0; j<adjList[u].size(); j++){
+			if(distList[adjList[u][j].node_i]>distList[u]+adjList[u][j].d){
+				distList[adjList[u][j].node_i] = distList[u]+adjList[u][j].d;
 				Q.push(node(adjList[u][j].node_i, distList[adjList[u][j].node_i]));
 			}
 		}
