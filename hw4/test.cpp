@@ -2,8 +2,9 @@
 #include <vector>
 #include <set>
 #include <map>
+#include "helper.h"
 using namespace std;
-
+using namespace DLX;
 void get_all_set(int targetValue, int var_i, vector<int> &varVector, set<set<int>> &candidateSet){
     if(var_i<varVector.size()-1){
         for(int i=varVector[var_i-1]+1; i<=9; i++){
@@ -31,6 +32,7 @@ void get_all_set(int targetValue, int var_i, vector<int> &varVector, set<set<int
 }
 
 int main(){
+	/*
 	int targetValue=15;
 	vector<int> varVector(3, 0);
 	set<set<int>> candidateSet;
@@ -42,7 +44,7 @@ int main(){
 		}
 		cout<<endl;
 	}
-	/*
+	
 	map<char, int> test_map;
 	char ch = 'a';
 	test_map.insert(pair<char, int>(ch, 0));
@@ -51,4 +53,22 @@ int main(){
 	(iter->second)+=1;
 	cout<<iter->second<<endl;
 	*/
+	Init(5);
+	vector<int> test(2);
+	test[0] = 1;
+	test[1] = 2;
+	AddRow(-1, test);
+	test[0] = 3;
+	test[1] = 4;
+	AddRow(-2, test);
+	test[0] = 1;
+	test[1] = 5;
+	AddRow(3, test);
+	vector<int> test2(1);
+	test2[0] = 5;
+	AddRow(-14, test2);
+	vector<int> result = Solver();
+	for(auto iter=result.begin(); iter!=result.end(); iter++)
+		cout<<*iter<<" ";
+	cout<<endl;
 }
