@@ -32,9 +32,8 @@ void get_all_set(int targetValue, int var_i, vector<int> &varVector, set<set<int
 }
 
 int main(){
-	/*
-	int targetValue=15;
-	vector<int> varVector(3, 0);
+	int targetValue=22;
+	vector<int> varVector(4, 0);
 	set<set<int>> candidateSet;
 	
 	get_all_set(targetValue, 0, varVector, candidateSet);
@@ -44,7 +43,7 @@ int main(){
 		}
 		cout<<endl;
 	}
-	
+	/*
 	map<char, int> test_map;
 	char ch = 'a';
 	test_map.insert(pair<char, int>(ch, 0));
@@ -52,7 +51,6 @@ int main(){
 	cout<<iter->second<<endl;
 	(iter->second)+=1;
 	cout<<iter->second<<endl;
-	*/
 	Init(5);
 	vector<int> test(2);
 	test[0] = 1;
@@ -70,5 +68,5 @@ int main(){
 	vector<int> result = Solver();
 	for(auto iter=result.begin(); iter!=result.end(); iter++)
 		cout<<*iter<<" ";
-	cout<<endl;
+	cout<<endl;*/
 }
