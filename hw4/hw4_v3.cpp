@@ -2,8 +2,10 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <cstdlib>
 #include <algorithm>
 #include "helper.h"
+
 using namespace std;
 using namespace DLX;
 
@@ -115,28 +117,11 @@ int main(){
 		set<set<int>> candidateSet;
 		vector<int> varVector(varNum, 0);
 		get_all_set(targetValue, 0, varVector, candidateSet);
-		//set<int> candidateBigSet;
-		/*for(auto iter=candidateSet.begin(); iter!=candidateSet.end(); iter++){
+		set<int> candidateBigSet;
+		for(auto iter=candidateSet.begin(); iter!=candidateSet.end(); iter++){
 			for(auto iter2=(*iter).begin(); iter2!=(*iter).end(); iter2++){
 				candidateBigSet.insert(*iter2);
 			}
-		}*/
-		
-		vector<bool> recordBigSet(9, 0);
-		for(auto iter=candidateSet.begin(); iter!=candidateSet.end(); iter++){
-			vector<bool> recordSet(9, 0);
-			vector<int> complementRow;
-			for(auto iter2=(*iter).begin(); iter2!=(*iter).end(); iter2++){
-				recordSet[*iter2-1]=1;
-				recordBigSet[*iter2-1]=1;
-			}
-			for(int k=0; k<9; k++){
-				if(recordSet[k]==0){
-					complementRow.push_back(324+(color-1)*9 + k+1);
-				}
-			}
-			if(complementRow.size()>0)
-				AddRow(-1, complementRow);
 		}
 		random_shuffle(indexRecord[color-1].begin(), indexRecord[color-1].end());
 		for(int j=0; j<indexRecord[color-1].size(); j++){
@@ -144,26 +129,23 @@ int main(){
 			int c = indexRecord[i][j].j;
 			int cellId = (r-1)*9 +c;
 			vector<int> row(5);
-			for(int k=0; k<9; k++){
-				if(recordBigSet[k]==1){
-					int rr = (cellId-1)*9 + k+1;
-					//row
-					row[0] = (r-1)*9 + k+1;
-					//col
-					row[1] = 81 + (c-1)*9 + k+1;
-					//palace
-					int p = ((r-1)/3*3 + (c-1)/3)+1;
-					row[2] = 162 + (p-1)*9 + k+1;
-					row[3] = 243+cellId;
-					//color
-					row[4] = 324 + (color-1)*9 + k+1;
-					AddRow(rr, row);
-				}
+			for(auto iter=candidateBigSet.begin(); iter!=candidateBigSet.end(); iter++){
+				int rr = (cellId-1)*9 + *iter;
+				//row
+				row[0] = (r-1)*9 + *iter;
+				//col
+				row[1] = 81 + (c-1)*9 + *iter;
+				//palace
+				int p = ((r-1)/3*3 + (c-1)/3)+1;
+				row[2] = 162 + (p-1)*9 + *iter;
+				row[3] = 243+cellId;
+				//color
+				row[4] = 324 + (color-1)*9 + *iter;
+				AddRow(rr, row);
 			}
 		}
-
 		//complement set
-		/*for(auto iter=candidateSet.begin(); iter!=candidateSet.end(); iter++){
+		for(auto iter=candidateSet.begin(); iter!=candidateSet.end(); iter++){
 			vector<int> complementRow;
 			for(int k=1; k<=9; k++){
 				if((*iter).count(k)==0){
@@ -172,7 +154,7 @@ int main(){
 			}
 			if(complementRow.size()>0)
 				AddRow(-1, complementRow);
-		}*/
+		}
 	}
 	vector<int> sol = Solver();
 	int ansBoard[9][9];
