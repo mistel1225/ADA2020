@@ -2,7 +2,10 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <cstdlib>
+#include <algorithm>
 #include "helper.h"
+
 using namespace std;
 using namespace DLX;
 
@@ -120,6 +123,7 @@ int main(){
 				candidateBigSet.insert(*iter2);
 			}
 		}
+		random_shuffle(indexRecord[color-1].begin(), indexRecord[color-1].end());
 		for(int j=0; j<indexRecord[color-1].size(); j++){
 			int r = indexRecord[i][j].i;
 			int c = indexRecord[i][j].j;
