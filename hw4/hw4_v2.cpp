@@ -2,8 +2,13 @@
 #include <vector>
 #include <set>
 #include <map>
+<<<<<<< HEAD
+=======
+#include <cstdlib>
+>>>>>>> 909917976a7fd1f0a9b27239d9a8b04151d45c69
 #include <algorithm>
 #include "helper.h"
+
 using namespace std;
 using namespace DLX;
 
